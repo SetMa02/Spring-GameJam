@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
 {
+    public event UnityAction DieInit;
+    
     [SerializeField] private float _maxSpeed = 8f;
     [SerializeField] private float _acceleration = 50f;
     [SerializeField] private float _deceleration = 40f;
@@ -158,6 +161,7 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
+        DieInit?.Invoke();
         Debug.Log("Dead");
     }
 }
