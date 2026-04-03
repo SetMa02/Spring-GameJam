@@ -162,6 +162,7 @@ public class Player : MonoBehaviour
     public void Die()
     {
         DieInit?.Invoke();
+        RespawnManager.Instance.Respawn(this.gameObject.transform);
         Debug.Log("Dead");
     }
 }
