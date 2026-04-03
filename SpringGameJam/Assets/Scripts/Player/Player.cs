@@ -109,4 +109,12 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    public void Die()
+    {
+        Debug.Log("Player died");
+
+        Destroy(gameObject);
+    }
+
 }
