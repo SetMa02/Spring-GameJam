@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 353507248}
   - component: {fileID: 353507247}
   m_Layer: 0
-  m_Name: Grid Objects
+  m_Name: Grid Objects Graveyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1789,7 +1789,7 @@ GameObject:
   - component: {fileID: 1416863070}
   - component: {fileID: 1416863069}
   m_Layer: 0
-  m_Name: ' Grid Wall Int'
+  m_Name: ' Grid Wall Int Graveyard'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1834,7 +1834,7 @@ GameObject:
   - component: {fileID: 1567705216}
   - component: {fileID: 1567705215}
   m_Layer: 0
-  m_Name: Grid Ground
+  m_Name: Grid Ground Graveyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
