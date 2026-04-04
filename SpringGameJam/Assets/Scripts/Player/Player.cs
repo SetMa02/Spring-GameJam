@@ -102,7 +102,6 @@ public class Player : MonoBehaviour
                 {
                     _rb.AddForce(new Vector2(horizontal * actualAcceleration, 0));
                 }
-
                 if (Mathf.Abs(_rb.velocity.x) > _maxSpeed)
                 {
                     _rb.velocity = new Vector2(_maxSpeed * Mathf.Sign(_rb.velocity.x), _rb.velocity.y);
@@ -228,7 +227,6 @@ public class Player : MonoBehaviour
         Debug.Log("Death process started.");
 
         _freezMovement = true;
-
         if (_bloodSplash != null)
         {
             _bloodSplash.Play();
