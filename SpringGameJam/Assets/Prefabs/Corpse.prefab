@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1364546698607447414}
   - component: {fileID: 58028280195249107}
   - component: {fileID: 4189042838579335420}
+  - component: {fileID: -7191824451893122430}
   m_Layer: 0
   m_Name: Corpse
   m_TagString: Untagged
@@ -171,3 +172,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48b0fdbab116c6448f2d0b4bf5c9b2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7191824451893122430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5276481095282002137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c287d175ab52c84ca3aeba6a348f21c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _normalCorpse: {fileID: 21300000, guid: 8fcad53f9131b3c48a3b44130d5e8d09, type: 3}
+  _drownCorpse: {fileID: 21300000, guid: 9b866aa905fc2a44ab778db7f842c22f, type: 3}
+  _burnedCorpse: {fileID: 21300000, guid: fbdaba836cd85594f876987ae4521197, type: 3}
+  _bouncyCorpse: {fileID: 0}

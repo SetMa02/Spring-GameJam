@@ -12,13 +12,15 @@ GameObject:
   - component: {fileID: 275347232284270445}
   - component: {fileID: 4144060372386279647}
   - component: {fileID: 2262920446961804564}
+  - component: {fileID: 8379695472461931475}
+  - component: {fileID: 2995022202236100915}
   m_Layer: 0
   m_Name: Saw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2020556116965081537
 Transform:
   m_ObjectHideFlags: 0
@@ -142,3 +144,30 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &8379695472461931475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9144454067614357144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccad06c31f48a344093adb062ceca6f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!111 &2995022202236100915
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9144454067614357144}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 62409a99fab66e5488d6429a8aa4d869, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0

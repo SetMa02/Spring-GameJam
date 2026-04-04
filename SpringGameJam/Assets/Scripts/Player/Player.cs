@@ -202,6 +202,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent(out WaterDeathZone deathZone))
+        {
+            _animator.SetTrigger("Drowning");
+        }
+    }
+
     public void PlayBlood()
     {
         _bloodSplash.Play();
@@ -209,7 +217,10 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        StartCoroutine(DeathRoutine());
+        if (_freezMovement == false)
+        {
+            StartCoroutine(DeathRoutine());
+        }
     }
 
     private IEnumerator DeathRoutine()
