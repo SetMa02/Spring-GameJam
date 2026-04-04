@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Die();
+            _animator.SetTrigger("Suicide");
         }
       
     }
