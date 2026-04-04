@@ -28,6 +28,11 @@ public class RespawnManager : MonoBehaviour
             rb.angularVelocity = 0f;
         }
     }
+    
+    public Vector3 GetRespawnPosition()
+    {
+        return spawnPoint.transform.position; // Предполагая, что у тебя есть переменная _respawnPoint
+    }
 
     public void SetSpawnPoint(Transform newSpawnPoint)
     {

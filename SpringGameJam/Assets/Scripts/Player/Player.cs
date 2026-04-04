@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float _deceleration = 40f;
     [SerializeField] private float _airControlPercent = 0.5f;
     [SerializeField] private ParticleSystem _bloodSplash;
+    [SerializeField] private GameObject _soulEffectPrefab; // <-- НОВОЕ: Префаб эффекта души
+    [SerializeField] private float _soulFlyDuration = 1.5f;
     
     [SerializeField] private float _jumpForce = 15f;
     
@@ -25,6 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _wallJumpForceY = 12f; // Сила отталкивания от стены по вертикали
     [SerializeField] private float _wallJumpDuration = 0.2f; // Время, на которое блокируется управление после прыжка
 
+    
 
     private Rigidbody2D _rb;
     private Animator _animator;
@@ -38,7 +41,7 @@ public class Player : MonoBehaviour
     private bool _freezMovement = false;
     
     // Для определения направления стены
-    private int _wallSide = 0; // -1 для левой стены, 1 для правой, 0 если нет стены
+    private int _wallSide = 0; // -1 для левой стены, 1 для правой, 0 если нет стены1
 
     private void Start()
     {
@@ -224,29 +227,72 @@ public class Player : MonoBehaviour
     }
 
     private IEnumerator DeathRoutine()
+{
+    Debug.Log("Death process started.");
+
+    // --- ШАГ 1: Заморозка и эффект смерти ---
+    _freezMovement = true;
+    _rb.velocity = Vector2.zero; // Резко останавливаем игрока
+
+    if (_bloodSplash != null)
     {
-        Debug.Log("Death process started.");
-
-        _freezMovement = true;
-
-        if (_bloodSplash != null)
-        {
-            _bloodSplash.Play();
-        }
-        
-        yield return new WaitForSeconds(0.2f);
-        
-        DieInit?.Invoke();
-        _spriteRenderer.enabled = false;
-        yield return new WaitForSeconds(3f);
-        LockCorpse?.Invoke();
-        
-        RespawnManager.Instance.Respawn(this.gameObject.transform);
-        _spriteRenderer.enabled = true;
-        _freezMovement = false;
-
-        Debug.Log("Player respawned.");
+        _bloodSplash.Play();
     }
+    
+    // Ждем, чтобы эффект крови успел появиться
+    yield return new WaitForSeconds(0.2f);
+
+    // --- ШАГ 2: Скрытие игрока и создание души ---
+    DieInit?.Invoke(); // Сообщаем, что пора спавнить труп
+    _spriteRenderer.enabled = false; // Скрываем спрайт игрока
+
+    // Получаем позицию спавна
+    Vector3 respawnPosition = RespawnManager.Instance.GetRespawnPosition(); // <-- ВАЖНО: см. ниже
+    
+    // Создаем эффект души на месте смерти игрока
+    GameObject soulInstance = Instantiate(_soulEffectPrefab, transform.position, Quaternion.identity);
+
+    CameraFollow2D.Instance.target = soulInstance.transform;
+
+    // --- ШАГ 3: Анимация полета души ---
+    float elapsedTime = 0f;
+    Vector3 startPosition = soulInstance.transform.position;
+    
+    while (elapsedTime < _soulFlyDuration)
+    {
+        // Плавно перемещаем душу к точке спавна
+        soulInstance.transform.position = Vector3.Lerp(startPosition, respawnPosition, elapsedTime / _soulFlyDuration);
+        elapsedTime += Time.deltaTime;
+        yield return null; // Ждем следующий кадр
+    }
+    // Убедимся, что душа точно в точке спавна
+    soulInstance.transform.position = respawnPosition;
+    
+    // --- ШАГ 4: Возрождение игрока ---
+    // Телепортируем настоящего игрока
+    RespawnManager.Instance.Respawn(this.gameObject.transform);
+    _spriteRenderer.enabled = true;
+    
+    // Можно добавить небольшой всплеск на месте спавна, когда душа долетела
+    // Например, проиграть тот же _bloodSplash в точке респауна
+    if (_bloodSplash != null)
+    {
+        _bloodSplash.transform.position = respawnPosition;
+        _bloodSplash.Play();
+    }
+
+    // --- ШАГ 5: Завершение ---
+    // Уничтожаем объект души
+    Destroy(soulInstance.gameObject);
+    
+    // Блокируем труп, чтобы его нельзя было использовать
+    LockCorpse?.Invoke();
+    
+    _freezMovement = false;
+    Debug.Log("Player respawned.");
+
+    CameraFollow2D.Instance.target = gameObject.transform;
+}
     
     
 }
