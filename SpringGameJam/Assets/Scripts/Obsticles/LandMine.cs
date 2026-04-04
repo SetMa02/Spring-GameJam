@@ -9,15 +9,15 @@ public class LandMine : MonoBehaviour
     [SerializeField] private float _explosionRadius = 5f; // Радиус взрыва
     [SerializeField] private float _explosionForce = 500f; // Сила взрыва
     [SerializeField] private LayerMask _layersToAffect; // Слои, которые затронет взрыв
-    
-    private void OnCollisionEnter(Collision other)
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.TryGetComponent(out Player player))
         {
             Explode();
         }
     }
-    
+
     public void Explode()
     {
         // Находим все коллайдеры в радиусе взрыва на указанных слоях
