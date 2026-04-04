@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Player))]
-public class PlayerCorpsePool : MonoBehaviour 
+public class PlayerCorpsePool : MonoBehaviour
 {
+    public bool IsVenom = false;
+    
     [SerializeField] private int _maxPlayerCorpses = 5;
     [SerializeField] private GameObject _playerCorpseTemplate;
 
@@ -74,6 +76,8 @@ public class PlayerCorpsePool : MonoBehaviour
             _playerCorpses.Add(corpseToSpawn);
         }
     }
+    
+    
 
     private void LockCorpse()
     {
