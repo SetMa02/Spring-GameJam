@@ -9,11 +9,18 @@ public class LandMine : MonoBehaviour
     [SerializeField] private float _explosionRadius = 5f; // Радиус взрыва
     [SerializeField] private float _explosionForce = 500f; // Сила взрыва
     [SerializeField] private LayerMask _layersToAffect; // Слои, которые затронет взрыв
+    private ParticleSystem _boomPS;
+
+    private void Start()
+    {
+        _boomPS = GetComponentInChildren<ParticleSystem>();
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.TryGetComponent(out Player player))
         {
+            player.Die();
             Explode();
         }
     }
@@ -23,6 +30,8 @@ public class LandMine : MonoBehaviour
         // Находим все коллайдеры в радиусе взрыва на указанных слоях
         Collider2D[] objectsInRange = Physics2D.OverlapCircleAll(transform.position, _explosionRadius, _layersToAffect);
 
+        _boomPS.Play();
+        
         foreach (Collider2D obj in objectsInRange)
         {
             // Проверяем, есть ли у объекта Rigidbody2D
