@@ -933,7 +933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c4db2b200835f449de0f4400ee3ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxPlayerCorpses: 5
+  _maxPlayerCorpses: 10
   _playerCorpseTemplate: {fileID: 5276481095282002137, guid: 0de59ab7b0ce5ca469d40f685f2e0d60, type: 3}
   _player: {fileID: 643090611}
 --- !u!1 &808559886

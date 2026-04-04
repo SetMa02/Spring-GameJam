@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
             _rb.velocity = wallJumpDirection;
             _animator.SetTrigger("JumpInit");
         }
+        
+        
     }
 
     private void FixedUpdate()
@@ -71,6 +73,17 @@ public class Player : MonoBehaviour
         {
             _rb.velocity = new Vector2(_rb.velocity.x, -_wallSlideSpeed);
         }
+        
+        Suicide();
+    }
+
+    private void Suicide()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Die();
+        }
+      
     }
 
     private void MoveCharacter(float horizontal)
