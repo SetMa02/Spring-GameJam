@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D), typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D), typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
 {
@@ -50,13 +51,14 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+            _animator.SetTrigger("JumpInit");
         }
         else if (_isTouchingWall && !_isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             // Стеновой прыжок
             Vector2 wallJumpDirection = new Vector2(-_wallSide * _wallJumpForceX, _wallJumpForceY);
             _rb.velocity = wallJumpDirection;
-            // Можно добавить корутину для блокировки управления на короткое время
+            _animator.SetTrigger("JumpInit");
         }
     }
 
@@ -103,31 +105,44 @@ public class Player : MonoBehaviour
 
     private void UpdateAnimations(float horizontal)
     {
-        if (horizontal > 0.01f)
+        if (_isTouchingWall && !_isGrounded)
         {
-            _spriteRenderer.flipX = false;
+            // _wallSide = -1 для левой стены, 1 для правой
+            // Если стена слева (_wallSide == -1), flipX должен быть true (смотрим влево)
+            // Если стена справа (_wallSide == 1), flipX должен быть false (смотрим вправо)
+            _spriteRenderer.flipX = (_wallSide == -1);
         }
-        else if (horizontal < -0.01f)
+        else // В любом другом случае (на земле, в обычном прыжке)
         {
-            _spriteRenderer.flipX = true;
+            // Стандартная логика поворота от ввода игрока
+            if (horizontal > 0.01f)
+            {
+                _spriteRenderer.flipX = false;
+            }
+            else if (horizontal < -0.01f)
+            {
+                _spriteRenderer.flipX = true;
+            }
         }
-
-
+    
+        // Остальная часть анимаций остается без изменений
+        _animator.SetFloat("Speed", Mathf.Abs(_rb.velocity.x));
+        _animator.SetBool("IsGrounded", _isGrounded);
+        _animator.SetBool("Sliding", _isTouchingWall);
     }
     
     private void OnCollisionEnter2D(Collision2D other)
     {
+        // Для земли логика остается прежней
         if (other.gameObject.GetComponent<Platforms>() != null)
         {
             _platformsContactCount++;
             if (_platformsContactCount > 0) _isGrounded = true;
         }
-
+    
+        // Для стен мы просто определяем сторону при первом контакте
         if (other.gameObject.GetComponent<Wall>() != null)
         {
-            _wallsContactCount++;
-            if (_wallsContactCount > 0) _isTouchingWall = true;
-
             // Определяем, с какой стороны стена
             Vector2 contactPoint = other.contacts[0].point;
             Vector2 playerCenter = transform.position;
@@ -135,8 +150,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        // Эта магия решает проблему со стыками!
+        // Выполняется каждый кадр, пока мы на стене.
+        if (other.gameObject.GetComponent<Wall>() != null)
+        {
+            _isTouchingWall = true;
+        }
+    }
+
     private void OnCollisionExit2D(Collision2D other)
     {
+        // Для земли логика остается прежней
         if (other.gameObject.GetComponent<Platforms>() != null)
         {
             _platformsContactCount--;
@@ -147,15 +173,13 @@ public class Player : MonoBehaviour
             }
         }
 
+        // Для стен мы сбрасываем флаг только при выходе
         if (other.gameObject.GetComponent<Wall>() != null)
         {
-            _wallsContactCount--;
-            if (_wallsContactCount <= 0)
-            {
-                _isTouchingWall = false;
-                _wallSide = 0;
-                _wallsContactCount = 0;
-            }
+            // Это может сработать некорректно на стыках, но Stay нас спасет.
+            // Однако, если у игрока в моменте нет контакта НИ с ОДНОЙ стеной, флаг сбросится.
+            _isTouchingWall = false;
+            _wallSide = 0;
         }
     }
 
