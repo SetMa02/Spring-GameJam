@@ -9,7 +9,6 @@ public class Corps : MonoBehaviour
     [SerializeField] private Sprite _drownCorpse;
     [SerializeField] private Sprite _burnedCorpse;
     [SerializeField]private Sprite _bouncyCorpse;
-    [SerializeField] private Sprite _poisonCorpse;
     
     private SpriteRenderer _spriteRenderer;
 
@@ -29,9 +28,8 @@ public class Corps : MonoBehaviour
             _spriteRenderer.sprite = _burnedCorpse;
         }
         else if (other.gameObject.TryGetComponent(out PoisonDeathZone poisonDeathZone))
-
         {
-            _spriteRenderer.sprite = _poisonCorpse;
+            _spriteRenderer.sprite = _bouncyCorpse;
         }
         
         else
@@ -39,4 +37,15 @@ public class Corps : MonoBehaviour
             _spriteRenderer.sprite = _normalCorpse;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.TryGetComponent(out Player player) && _spriteRenderer.sprite == _bouncyCorpse)
+        {
+            player.IsOnPoisonedCorpse();
+        }
+        
+    }
+
+   
 }

@@ -8,6 +8,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
 {
+    public bool _JumpBoost = false;
     public event UnityAction DieInit;
     public event UnityAction LockCorpse;
     
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
     private int _platformsContactCount = 0;
     private bool _freezMovement = false;
     
+    
     // Для определения направления стены
     private int _wallSide = 0; // -1 для левой стены, 1 для правой, 0 если нет стены1
 
@@ -66,8 +68,6 @@ public class Player : MonoBehaviour
             _rb.velocity = wallJumpDirection;
             _animator.SetTrigger("JumpInit");
         }
-        
-        
     }
 
     private void FixedUpdate()
@@ -224,6 +224,11 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(DeathRoutine());
         }
+    }
+
+    public void IsOnPoisonedCorpse()
+    {
+        _rb.AddForce(Vector2.up * 15f, ForceMode2D.Impulse);
     }
 
     private IEnumerator DeathRoutine()
