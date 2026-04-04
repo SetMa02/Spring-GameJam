@@ -9,11 +9,13 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public event UnityAction DieInit;
+    public event UnityAction LockCorpse;
     
     [SerializeField] private float _maxSpeed = 8f;
     [SerializeField] private float _acceleration = 50f;
     [SerializeField] private float _deceleration = 40f;
     [SerializeField] private float _airControlPercent = 0.5f;
+    [SerializeField] private ParticleSystem _bloodSplash;
     
     [SerializeField] private float _jumpForce = 15f;
     
@@ -32,7 +34,8 @@ public class Player : MonoBehaviour
     private bool _isGrounded = false; 
     private float _horizontalInput;
     private int _wallsContactCount = 0;
-    private int _platformsContactCount = 0; 
+    private int _platformsContactCount = 0;
+    private bool _freezMovement = false;
     
     // Для определения направления стены
     private int _wallSide = 0; // -1 для левой стены, 1 для правой, 0 если нет стены
@@ -88,30 +91,33 @@ public class Player : MonoBehaviour
 
     private void MoveCharacter(float horizontal)
     {
-        float actualAcceleration = _isGrounded ? _acceleration : _acceleration * _airControlPercent;
-        float actualDeceleration = _isGrounded ? _deceleration : _deceleration * _airControlPercent;
-
-        if (horizontal != 0)
+        if (_freezMovement == false)
         {
-            if (!(_isTouchingWall && Mathf.Sign(horizontal) == _wallSide))
-            {
-                _rb.AddForce(new Vector2(horizontal * actualAcceleration, 0));
-            }
+            float actualAcceleration = _isGrounded ? _acceleration : _acceleration * _airControlPercent;
+            float actualDeceleration = _isGrounded ? _deceleration : _deceleration * _airControlPercent;
 
-            if (Mathf.Abs(_rb.velocity.x) > _maxSpeed)
+            if (horizontal != 0)
             {
-                _rb.velocity = new Vector2(_maxSpeed * Mathf.Sign(_rb.velocity.x), _rb.velocity.y);
+                if (!(_isTouchingWall && Mathf.Sign(horizontal) == _wallSide))
+                {
+                    _rb.AddForce(new Vector2(horizontal * actualAcceleration, 0));
+                }
+
+                if (Mathf.Abs(_rb.velocity.x) > _maxSpeed)
+                {
+                    _rb.velocity = new Vector2(_maxSpeed * Mathf.Sign(_rb.velocity.x), _rb.velocity.y);
+                }
             }
-        }
-        else
-        {
-            if (Mathf.Abs(_rb.velocity.x) > 0.01f)
+            else
             {
-                _rb.AddForce(new Vector2(-_rb.velocity.x * actualDeceleration, 0));
-            }
-            else if (Mathf.Abs(_rb.velocity.x) < 0.01f)
-            {
-                _rb.velocity = new Vector2(0, _rb.velocity.y);
+                if (Mathf.Abs(_rb.velocity.x) > 0.01f)
+                {
+                    _rb.AddForce(new Vector2(-_rb.velocity.x * actualDeceleration, 0));
+                }
+                else if (Mathf.Abs(_rb.velocity.x) < 0.01f)
+                {
+                    _rb.velocity = new Vector2(0, _rb.velocity.y);
+                }
             }
         }
     }
@@ -196,10 +202,40 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void PlayBlood()
+    {
+        _bloodSplash.Play();
+    }
+
     public void Die()
     {
-        DieInit?.Invoke();
-        RespawnManager.Instance.Respawn(this.gameObject.transform);
-        Debug.Log("Dead");
+        StartCoroutine(DeathRoutine());
     }
+
+    private IEnumerator DeathRoutine()
+    {
+        Debug.Log("Death process started.");
+
+        _freezMovement = true;
+
+        if (_bloodSplash != null)
+        {
+            _bloodSplash.Play();
+        }
+        
+        yield return new WaitForSeconds(0.2f);
+        
+        DieInit?.Invoke();
+        _spriteRenderer.enabled = false;
+        yield return new WaitForSeconds(3f);
+        LockCorpse?.Invoke();
+        
+        RespawnManager.Instance.Respawn(this.gameObject.transform);
+        _spriteRenderer.enabled = true;
+        _freezMovement = false;
+
+        Debug.Log("Player respawned.");
+    }
+    
+    
 }

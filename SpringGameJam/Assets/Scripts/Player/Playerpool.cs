@@ -12,6 +12,8 @@ public class PlayerCorpsePool : MonoBehaviour
     private List<GameObject> _playerCorpses;
     [SerializeField]private Player _player;
     private int _activeCorpseCount = 0;
+    private Rigidbody2D _rb;
+    private GameObject _currentCorpse;
 
     private void Start()
     {
@@ -23,11 +25,13 @@ public class PlayerCorpsePool : MonoBehaviour
     private void OnEnable()
     {
         _player.DieInit += SpawnCorpse;
+        _player.LockCorpse += LockCorpse;
     }
 
     private void OnDisable()
     {
         _player.DieInit -= SpawnCorpse;
+        _player.LockCorpse -= LockCorpse;
     }
 
     private void PoolInit()
@@ -61,6 +65,7 @@ public class PlayerCorpsePool : MonoBehaviour
         
         if (corpseToSpawn != null)
         {
+            _currentCorpse = corpseToSpawn;
             corpseToSpawn.transform.position = transform.position; 
             corpseToSpawn.transform.rotation = transform.rotation;   
             corpseToSpawn.SetActive(true); 
@@ -68,5 +73,14 @@ public class PlayerCorpsePool : MonoBehaviour
             _playerCorpses.Remove(corpseToSpawn);
             _playerCorpses.Add(corpseToSpawn);
         }
+    }
+
+    private void LockCorpse()
+    {
+        if (_currentCorpse.TryGetComponent(out Rigidbody2D rb))
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        
     }
 }
