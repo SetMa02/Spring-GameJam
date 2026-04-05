@@ -9624,11 +9624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5027181642606726685, guid: 90d81c9a4f7538b4caf706c4871d901d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 65.12
+      value: -4.02
       objectReference: {fileID: 0}
     - target: {fileID: 5027181642606726685, guid: 90d81c9a4f7538b4caf706c4871d901d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.3
+      value: -3.04
       objectReference: {fileID: 0}
     - target: {fileID: 5027181642606726685, guid: 90d81c9a4f7538b4caf706c4871d901d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9768,7 +9768,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: cfeb2ad24c5c519448235f5a48c8cbea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 053d0ee2ae84ada48ab0b9ec1519e2fd, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.31
   m_Pitch: 1
@@ -10286,7 +10286,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 4.77, y: 6.42}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 4.77, y: 6.42}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -10335,15 +10335,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 134b63ceb68607b4fb5d7153f7e8e6f4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d0040283021d41647ad955d90c3dc964, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.77, y: 6.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &2065058846

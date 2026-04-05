@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Fin.unity
     guid: a94187acbcdbc464b9f6c7555109dc09
   - enabled: 0
+    path: Assets/Scenes/IntroCutScene.unity
+    guid: b3d4fae38e60e74449c091470088e3c9
+  - enabled: 0
     path: Assets/Scenes/Map3.unity
     guid: d60a03e8ac567814b82a3f3fc09ad103
   - enabled: 0
