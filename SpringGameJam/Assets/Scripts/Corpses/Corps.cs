@@ -27,9 +27,25 @@ public class Corps : MonoBehaviour
         {
             _spriteRenderer.sprite = _burnedCorpse;
         }
+        else if (other.gameObject.TryGetComponent(out PoisonDeathZone poisonDeathZone))
+        {
+            _spriteRenderer.sprite = _bouncyCorpse;
+        }
+        
         else
         {
             _spriteRenderer.sprite = _normalCorpse;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.TryGetComponent(out Player player) && _spriteRenderer.sprite == _bouncyCorpse)
+        {
+            player.IsOnPoisonedCorpse();
+        }
+        
+    }
+
+   
 }
