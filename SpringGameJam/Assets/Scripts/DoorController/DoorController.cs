@@ -10,6 +10,8 @@ public class DoorController : MonoBehaviour
     [SerializeField] private SpriteRenderer[] indicators;
     [SerializeField] private Color inactiveColor = Color.red;
     [SerializeField] private Color activeColor = Color.green;
+    [SerializeField] private Player _player;
+    [SerializeField] private Transform _targetTransform;
 
     private bool isOpen = false;
 
@@ -42,16 +44,6 @@ public class DoorController : MonoBehaviour
 
     private void OpenDoor()
     {
-        isOpen = true;
-
-        if (doorCollider != null)
-            doorCollider.enabled = false;
-
-        if (doorRenderer != null)
-        {
-            Color color = doorRenderer.color;
-            color.a = 0.4f;
-            doorRenderer.color = color;
-        }
+        _player.transform.position = _targetTransform.position;
     }
 }
