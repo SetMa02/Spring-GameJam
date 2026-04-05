@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
+// using System.Linq; // Он нам больше не нужен, так как мы не используем .First()
 
 public class CutsceneManager : MonoBehaviour
 {
@@ -13,24 +13,17 @@ public class CutsceneManager : MonoBehaviour
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 1.0f;
 
-    // НОВЫЙ ФЛАГ ДЛЯ БЛОКИРОВКИ
     private bool _isTransitioning = false;
+    private int _currentSlideIndex = 0; // Используем индекс вместо удаления из списка
 
     private void Start()
     {
-        if (sceneObjects.Count > 0)
-        {
-            sceneObjects[0].SetActive(true);
-            for (int i = 1; i < sceneObjects.Count; i++)
-            {
-                sceneObjects[i].SetActive(false);
-            }
-        }
+        // Показываем первый слайд при старте
+        ChangeSlideContent();
     }
 
     private void Update()
     {
-        // НОВОЕ УСЛОВИЕ: Проверяем флаг перед тем, как реагировать на нажатие
         if (Input.GetKeyDown(KeyCode.Space) && !_isTransitioning)
         {
             StartCoroutine(NextSlideRoutine());
@@ -39,7 +32,6 @@ public class CutsceneManager : MonoBehaviour
 
     private IEnumerator NextSlideRoutine()
     {
-        // --- НОВОЕ: В самом начале корутины ставим блокировку ---
         _isTransitioning = true;
 
         // --- ШАГ 1: FADE OUT (затемнение экрана) ---
@@ -51,7 +43,6 @@ public class CutsceneManager : MonoBehaviour
         // --- ШАГ 3: FADE IN (проявление экрана) ---
         yield return StartCoroutine(FadeCanvasGroup(FadeGroup, 0f));
 
-        // --- НОВОЕ: В самом конце корутины снимаем блокировку ---
         _isTransitioning = false;
     }
 
@@ -59,33 +50,51 @@ public class CutsceneManager : MonoBehaviour
     {
         float startAlpha = canvasGroup.alpha;
         float elapsedTime = 0f;
-
         while (elapsedTime < fadeDuration)
         {
             canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / fadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         canvasGroup.alpha = targetAlpha;
     }
     
+    // --- ИЗМЕНЕННЫЙ МЕТОД ---
     private void ChangeSlideContent()
     {
-        if (sceneObjects.Count == 0)
+        // Если слайды закончились, загружаем новую сцену
+        if (_currentSlideIndex >= sceneObjects.Count)
         {
             Debug.Log("Cutscene finished. Loading next scene.");
             SceneManager.LoadScene(2);
             return;
         }
-
-        GameObject currentSlide = sceneObjects.First();
-        currentSlide.SetActive(false);
-        sceneObjects.Remove(currentSlide);
-
-        if (sceneObjects.Count > 0)
+        
+        // Сначала выключаем ВСЕ слайды на всякий случай
+        foreach (var slide in sceneObjects)
         {
-            sceneObjects[0].SetActive(true);
+            slide.SetActive(false);
         }
+
+        // Теперь берем нужный слайд по индексу и активируем его
+        GameObject currentSlideObject = sceneObjects[_currentSlideIndex];
+        currentSlideObject.SetActive(true);
+
+        // --- НОВАЯ ЛОГИКА: Пытаемся найти SlideController и запустить его ---
+        SlideController slideController = currentSlideObject.GetComponent<SlideController>();
+
+        if (slideController != null)
+        {
+            // Если скрипт есть, вызываем его метод Show()
+            slideController.Show();
+        }
+        else
+        {
+            // Если скрипта нет, слайд просто включится (картинка и текст будут видны сразу)
+            Debug.LogWarning($"На слайде '{currentSlideObject.name}' нет компонента SlideController. Текст появится мгновенно.");
+        }
+        
+        // Увеличиваем индекс для следующего перехода
+        _currentSlideIndex++;
     }
 }
