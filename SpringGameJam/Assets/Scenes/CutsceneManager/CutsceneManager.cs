@@ -39,7 +39,7 @@ public class CutsceneManager : MonoBehaviour
 
 private IEnumerator FadeIn()
    {
-       yield return new WaitForSeconds(fadeSpeed);
+       //yield return new WaitForSeconds(fadeSpeed);
        
        return null;
    }
