@@ -244,6 +244,9 @@ public class Player : MonoBehaviour
         _bloodSplash.Play();
     }
     
+    SoundManager.Instance.PlayDeath();
+    SoundManager.Instance.StopFootsteps();
+    
     // Ждем, чтобы эффект крови успел появиться
     yield return new WaitForSeconds(0.2f);
 
