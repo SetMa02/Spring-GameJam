@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerSoundController : MonoBehaviour
 {
+    
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float moveThreshold = 0.1f;
 
@@ -24,7 +25,7 @@ public class PlayerSoundController : MonoBehaviour
         {
             if (!footstepsPlaying)
             {
-                SoundManager.Instance.StartFootsteps();
+                AudioManager.Instance.PlayFootstepSound();
                 footstepsPlaying = true;
             }
         }
@@ -32,28 +33,16 @@ public class PlayerSoundController : MonoBehaviour
         {
             if (footstepsPlaying)
             {
-                SoundManager.Instance.StopFootsteps();
+                
                 footstepsPlaying = false;
             }
         }
 
         if (wasGrounded && !IsGrounded)
         {
-            SoundManager.Instance.PlayJump();
+            AudioManager.Instance.PlayJumpSound();
         }
 
         wasGrounded = IsGrounded;
-    }
-
-    public void PlayNormalDeath()
-    {
-        SoundManager.Instance.PlayDeath();
-        SoundManager.Instance.StopFootsteps();
-    }
-
-    public void PlayTrapDeath()
-    {
-        SoundManager.Instance.PlayTrapDeath();
-        SoundManager.Instance.StopFootsteps();
     }
 }
