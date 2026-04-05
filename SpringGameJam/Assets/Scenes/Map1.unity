@@ -10146,10 +10146,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 18281ca7772980b45bf62fa719d81886, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 0.38
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -13210,11 +13210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00cf8dec553b77f40ab42a6abc0a3666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  footstepClip: {fileID: 8300000, guid: c33c499f91ed6f34980e6da6b586641c, type: 3}
-  stepDelay: 0.35
-  timer: 0
-  rb: {fileID: 0}
 --- !u!1 &1559911754
 GameObject:
   m_ObjectHideFlags: 0
@@ -14669,11 +14664,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5027181642606726685, guid: 90d81c9a4f7538b4caf706c4871d901d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.65
+      value: 59.5
       objectReference: {fileID: 0}
     - target: {fileID: 5027181642606726685, guid: 90d81c9a4f7538b4caf706c4871d901d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.37
+      value: -4.7
       objectReference: {fileID: 0}
     - target: {fileID: 5027181642606726685, guid: 90d81c9a4f7538b4caf706c4871d901d, type: 3}
       propertyPath: m_LocalPosition.z
