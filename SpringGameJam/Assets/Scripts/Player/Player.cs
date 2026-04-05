@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _soulEffectPrefab; // <-- НОВОЕ: Префаб эффекта души
     [SerializeField] private float _soulFlyDuration = 1.5f;
     
+    private float _footstepTimer = 0f;
+    [SerializeField] private float _footstepCooldown = 0.4f;
+    
     [SerializeField] private float _jumpForce = 15f;
     
     [Header("Wall Jump Settings")]
@@ -59,6 +62,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+            AudioManager.Instance.PlayJumpSound();
             _animator.SetTrigger("JumpInit");
         }
         else if (_isTouchingWall && !_isGrounded && Input.GetKeyDown(KeyCode.Space))
@@ -244,8 +248,7 @@ public class Player : MonoBehaviour
         _bloodSplash.Play();
     }
     
-    SoundManager.Instance.PlayDeath();
-    SoundManager.Instance.StopFootsteps();
+    AudioManager.Instance.PlayTrapDeathSound();
     
     // Ждем, чтобы эффект крови успел появиться
     yield return new WaitForSeconds(0.2f);

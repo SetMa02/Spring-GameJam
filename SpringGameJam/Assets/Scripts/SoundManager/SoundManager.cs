@@ -1,64 +1,77 @@
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class AudioManager : MonoBehaviour
 {
-    public static SoundManager Instance;
+    // Статическая ссылка на экземпляр класса (паттерн Singleton)
+    public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource sfxSource;
-    [SerializeField] private AudioSource footstepSource;
+    // Один AudioSource для звуков, которые не нужно прерывать (шаги, подбор предметов)
+    [SerializeField] private AudioSource _sfxSource; 
+    
+    // Второй AudioSource для важных звуков, которые должны играть сами (музыка, фоновые шумы)
+    [SerializeField] private AudioSource _musicSource; 
 
-    [Header("Clips")]
+    [Header("Audio Clips")]
     [SerializeField] private AudioClip footstepClip;
     [SerializeField] private AudioClip jumpClip;
     [SerializeField] private AudioClip deathClip;
     [SerializeField] private AudioClip trapDeathClip;
+    // ... добавь сюда любые другие звуки, которые понадобятся
 
     private void Awake()
     {
+        // Стандартная реализация Singleton
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
-            return;
+            Destroy(this.gameObject);
         }
-
-        Instance = this;
-    }
-
-    public void PlayJump()
-    {
-        if (jumpClip != null)
-            sfxSource.PlayOneShot(jumpClip);
-    }
-
-    public void PlayDeath()
-    {
-        if (deathClip != null)
-            sfxSource.PlayOneShot(deathClip);
-    }
-
-    public void PlayTrapDeath()
-    {
-        if (trapDeathClip != null)
-            sfxSource.PlayOneShot(trapDeathClip);
-    }
-
-    public void StartFootsteps()
-    {
-        if (footstepClip == null || footstepSource == null)
-            return;
-
-        if (!footstepSource.isPlaying)
+        else
         {
-            footstepSource.clip = footstepClip;
-            footstepSource.loop = true;
-            footstepSource.Play();
+            Instance = this;
+            // Делаем так, чтобы объект с AudioManager не уничтожался при загрузке новой сцены
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
-    public void StopFootsteps()
+    // --- ПУБЛИЧНЫЕ МЕТОДЫ ДЛЯ ВЫЗОВА ИЗ ЛЮБОГО СКРИПТА ---
+
+    public void PlayFootstepSound()
     {
-        if (footstepSource != null && footstepSource.isPlaying)
-            footstepSource.Stop();
+        PlaySound(footstepClip);
+    }
+
+    public void PlayJumpSound()
+    {
+        PlaySound(jumpClip);
+    }
+
+    public void PlayDeathSound()
+    {
+        PlaySound(deathClip);
+    }
+
+    public void PlayTrapDeathSound()
+    {
+        PlaySound(trapDeathClip);
+    }
+
+    // Универсальный метод для воспроизведения любого звука
+    public void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            _sfxSource.PlayOneShot(clip);
+        }
+    }
+
+    // Если захочешь управлять музыкой отдельно
+    public void PlayMusic(AudioClip musicClip)
+    {
+        if (musicClip != null)
+        {
+            _musicSource.clip = musicClip;
+            _musicSource.Play();
+        }
     }
 }
