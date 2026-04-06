@@ -153,14 +153,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _JumpBoost: 0
-  _maxSpeed: 2
+  _maxSpeed: 4
   _acceleration: 50
   _deceleration: 40
   _airControlPercent: 0.5
   _bloodSplash: {fileID: 2814824899046519589}
   _soulEffectPrefab: {fileID: 1433936447370190729, guid: 986b3f5552f323d40832c23d3518de43, type: 3}
   _soulFlyDuration: 1.5
-  _jumpForce: 5
+  _footstepCooldown: 0.4
+  _jumpForce: 7
   _wallSlideSpeed: 2
   _wallJumpForceX: 50
   _wallJumpForceY: 12
